@@ -6,31 +6,30 @@
 #include "App.h"
 
 void Console::printUserOptions() const {
-  std::cout << "=====<Welcome to Task Manager App>=====\n"
-            << "Select your option by number:\n";
+  printMessage("=====<Welcome to Task Manager App>=====\nSelect your option by number:");
   
   for(auto option: options) {
-    std::cout << option << '\n';
+    printMessage(option);
   }
 }
 
 
-template <typename T>
-T getInput(const std::function<bool(T)>& predicate = [](T){ return true; }) {
-  T input {};
+
+int Console::getInteger(int min, long max) {
+  int input {};
   while(true) {
     std::cin >> input;
 
     if (std::cin.fail()) {
       std::cin.clear();
-      std::cout << "Invalid Input! \n";
+      printMessage("Invalid Input!");
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       continue;
     }
 
-    if(!predicate(input)) {
+    if(input < min || input > max) {
       std::cin.clear();
-      std::cout << "Invalid Input! \n";
+      printMessage("Invalid Input!");
       continue;
     }
 
@@ -43,42 +42,74 @@ void Console::printTasks() const {
 }
 
 void Console::getUserOption() {
-  userOption = getInput<int>(
-    [](int input) {
-      return  input >= 1 || input <= numberOfOptions;
+  userOption = getInteger(1, numberOfOptions);
+}
+
+std::string Console::getStringInput() const {
+  std::string input{};
+
+  while (true) {
+    std::getline(std::cin >> std::ws, input);
+
+    if (std::cin.fail()) {
+      std::cin.clear();
+      printMessage("Invalid Input!");
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      continue;
     }
-  );
+
+    return input;
+  }
+  
 }
 
 void Console::addTask() {
-  std::cout << "Enter your task's title:\n";
-  std::string title { getInput<std::string>() };
+  printMessage("Enter your task's title:");
+  std::string title { getStringInput() };
 
-  std::cout << "Enter your task's description:\n";
-  std::string description { getInput<std::string>() };
+  printMessage("Enter your task's description:");
+  std::string description { getStringInput() };
 
-  std::cout << "Shoose your task's priority by number:\n"
-            << "1- Low\n"
-            << "2- Medium\n"
-            << "3- High\n";
-  int priority { getInput<int>([](int input){ return input >= 1 && input <= 3; }) };
+  printMessage(
+    "Shoose your task's priority by number:\n1- Low\n2- Medium\n3- High"
+  );
+  int priority { getInteger(1, 3) };
 
-  std::cout << title << description << priority << '\n';
+  // I subtracted 1 from priority because TaskPriority enum type start from 0
+  app.addTask(Task{ title, description, static_cast<Task::TaskPriority>(priority - 1)});
+}
+
+void Console::deleteTask() {
+  printMessage("Enter the task's id:");
+  app.deleteTask(
+    getInteger(1, std::numeric_limits<std::streamsize>::max())
+  );
 }
 
 void Console::run() {
 
-  printUserOptions();
-  getUserOption();
-
-  switch(userOption - 1) {
-    case listTasks:
+  while (true) {
+    printUserOptions();
+    getUserOption();
+    
+    // I subtracted 1 from priority because TaskPriority enum type start from 0
+    switch(userOption - 1) {
+    case list:
       printTasks();
+      printMessage("Task added");
       break;
-    case addNewTask:
+    case add:
       addTask();
       break;
+    case remove:
+      deleteTask();
+      break;
+    case quit:
+      printMessage("Thanks for using task manager app");
+      return;
     default:
       break;
+    }
   }
+  
 }

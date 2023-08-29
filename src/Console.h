@@ -6,9 +6,9 @@
 class Console {
 public:
   enum Option {
-    listTasks,
-    addNewTask,
-    deleteTask,
+    list,
+    add,
+    remove,
     highPriorityTasks,
     mediumPriorityTasks,
     lowPriorityTasks,
@@ -16,10 +16,6 @@ public:
 
     maxOption,
   };
-  void printUserOptions() const;
-  void getUserOption();
-  void printTasks() const;
-  void addTask();
   void run();
 
 
@@ -37,6 +33,17 @@ private:
     "6- List All low priority tasks",
     "7- Quit the app"
   };
+
+  std::string getStringInput() const;
+  int getInteger(int min, long max);
+  void printUserOptions() const;
+  void getUserOption();
+  void printTasks() const;
+  void addTask();
+  void deleteTask();
+  void printMessage(std::string_view message) const {
+    std::cout << message << '\n';
+  }
 };
 
 #endif

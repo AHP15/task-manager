@@ -10,7 +10,7 @@ class App {
 public:
   using Tasks = std::vector<Task>;
   
-  void addTask(Task& task) { tasks.push_back(task); }
+  void addTask(const Task& task) { tasks.push_back(task); }
   void deleteTask(int taskId);
   void editTask(int taskId, const Task& task);
 
