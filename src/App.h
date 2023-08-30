@@ -3,6 +3,8 @@
 
 #include <functional>
 #include <vector>
+#include <memory>
+#include <utility>
 
 #include "Task.h"
 
@@ -10,7 +12,7 @@ class App {
 public:
   using Tasks = std::vector<Task>;
   
-  void addTask(const Task& task) { tasks.push_back(task); }
+  void addTask(Task* task) { tasks.push_back(std::move(*task)); }
   void deleteTask(int taskId);
   void editTask(int taskId, const Task& task);
 

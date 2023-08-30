@@ -41,6 +41,11 @@ void Console::printTasks() const {
   for(auto& task: app.getTasks()) std::cout << task;
 }
 
+void Console::printFilteredTasks(const std::function<bool(const Task& task)>&  predicate) const {
+  App::Tasks filteredTasks { app.filterTasks(predicate) };
+  for(auto& task: filteredTasks) std::cout << task;
+}
+
 void Console::getUserOption() {
   userOption = getInteger(1, numberOfOptions);
 }
@@ -73,10 +78,25 @@ void Console::addTask() {
   printMessage(
     "Shoose your task's priority by number:\n1- Low\n2- Medium\n3- High"
   );
-  int priority { getInteger(1, 3) };
+  int Integer { getInteger(1, 3) };
 
-  // I subtracted 1 from priority because TaskPriority enum type start from 0
-  app.addTask(Task{ title, description, static_cast<Task::TaskPriority>(priority - 1)});
+  Task::TaskPriority priority {};
+  switch (Integer) {
+  case 1:
+    priority = Task::low;
+    break;
+  case 2:
+    priority = Task::medium;
+    break;
+  case 3:
+    priority = Task::high;
+    break;
+  default:
+    break;
+  }
+  app.addTask(
+    new Task{ title, description, priority }
+  );
 }
 
 void Console::deleteTask() {
@@ -96,10 +116,10 @@ void Console::run() {
     switch(userOption - 1) {
     case list:
       printTasks();
-      printMessage("Task added");
       break;
     case add:
       addTask();
+      printMessage("Task added");
       break;
     case remove:
       deleteTask();
@@ -107,6 +127,21 @@ void Console::run() {
     case quit:
       printMessage("Thanks for using task manager app");
       return;
+    case highPriorityTasks:
+      printFilteredTasks([](const Task& task){
+        return task.getPriority() == Task::high;
+      });
+      break;
+    case mediumPriorityTasks:
+      printFilteredTasks([](const Task& task){
+        return task.getPriority() == Task::medium;
+      });
+      break;
+    case lowPriorityTasks:
+      printFilteredTasks([](const Task& task){
+        return task.getPriority() == Task::low;
+      });
+      break;
     default:
       break;
     }

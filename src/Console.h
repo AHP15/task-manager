@@ -39,6 +39,7 @@ private:
   void printUserOptions() const;
   void getUserOption();
   void printTasks() const;
+  void printFilteredTasks(const std::function<bool(const Task& task)>&  predicate) const;
   void addTask();
   void deleteTask();
   void printMessage(std::string_view message) const {
