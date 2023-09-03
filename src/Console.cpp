@@ -95,7 +95,7 @@ void Console::addTask() {
     break;
   }
   app.addTask(
-    new Task{ title, description, priority }
+    Task{ title, description, priority }
   );
 }
 

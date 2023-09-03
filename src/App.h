@@ -7,12 +7,13 @@
 #include <utility>
 
 #include "Task.h"
+#include "Storage.h"
 
 class App {
 public:
   using Tasks = std::vector<Task>;
   
-  void addTask(Task* task) { tasks.push_back(std::move(*task)); }
+  void addTask(Task task);
   void deleteTask(int taskId);
   void editTask(int taskId, const Task& task);
 
@@ -21,6 +22,7 @@ public:
 
 private:
   Tasks tasks{};
+  Storage tasksFile{};
 };
 
 #endif
