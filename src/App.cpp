@@ -40,6 +40,7 @@ void App::editTask(int taskId, const Task& EditedTask) {
 
 App::Tasks& App::filterTasks(const std::function<bool(const Task& task)>&  predicate) const {
   static App::Tasks filteredTasks {};
+  filteredTasks = {};
   for(auto& task: tasks) {
     if(predicate(task)) {
       filteredTasks.push_back(task);
