@@ -16,3 +16,16 @@ std::string_view Task::getPriorityAsStr() const {
     default: return "Unknown priority";
   }
 }
+
+Task::TaskMap Task::toJson() const {
+  Task::TaskMap map {
+    {"title", ""},
+    {"description", ""},
+    {"priority", ""}
+  };
+
+  map["title"] = title;
+  map["description"] = description;
+  map["priority"] = getPriorityAsStr();
+  return map;
+}

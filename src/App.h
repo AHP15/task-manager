@@ -12,6 +12,14 @@
 class App {
 public:
   using Tasks = std::vector<Task>;
+
+  App() {
+    tasks = tasksFile.loadTasks();
+  }
+
+  ~App() {
+    tasksFile.writeTasks(tasks);
+  }
   
   void addTask(Task task);
   void deleteTask(int taskId);
@@ -21,8 +29,8 @@ public:
   const Tasks& getTasks() const { return tasks; }
 
 private:
+  Storage tasksFile{ "tasks.json" };
   Tasks tasks{};
-  Storage tasksFile{};
 };
 
 #endif

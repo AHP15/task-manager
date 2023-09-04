@@ -9,10 +9,15 @@
 
 class Storage {
 public:
+  using Tasks = std::vector<Task>;
 
-  void writeNewTask(const Task& task);
+  Storage(std::string_view file): filename{ file }{};
+  void writeTasks(const Tasks& appTasks);
+  Tasks loadTasks();
+
 private:
   using json = nlohmann::json;
-  std::ofstream tasks{ "tasks.json" };
+  std::fstream tasksFile{};
+  std::string filename{};
 };
 #endif

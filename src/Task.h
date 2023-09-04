@@ -4,6 +4,7 @@
 #include <string_view>
 #include <string>
 #include <iostream>
+#include <map>
 
 class Task {
 public:
@@ -12,6 +13,8 @@ public:
     medium,
     low
   };
+
+  using TaskMap = std::map<std::string, std::string>;
 
   Task(std::string_view title, std::string_view description, TaskPriority priority)
   :id{s_idGenerator++}, title{title}, description{description}, priority{priority}
@@ -27,6 +30,8 @@ public:
   void updateTitle(std::string_view value) { title = value; }
   void updateDesctipion(std::string_view value) { description = value; }
   void updatePriority(TaskPriority value) { priority = value; }
+
+  TaskMap toJson() const;
 
   friend std::ostream& operator<<(std::ostream& out, const Task& task);
 

@@ -4,7 +4,6 @@
 
 void App::addTask(Task task) {
   tasks.push_back(task);
-  tasksFile.writeNewTask(task);
 }
 
 void App::deleteTask(int taskId) {
