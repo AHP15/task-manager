@@ -27,10 +27,21 @@ Storage::Tasks Storage::loadTasks() {
   json data;
   tasksFile >> data;
 
-  Task::TaskPriority priority {};
-
   for(auto& obj: data) {
-    std::cout << obj << '\n';
+
+    std::string title { obj["title"] };
+    std::string description { obj["description"] };
+
+    Task::TaskPriority priority {};
+    if(obj["priority"] == "low") priority = Task::low;
+    else if(obj["priority"] == "medium") priority = Task::medium;
+    else if(obj["priority"] == "high") priority = Task::high;
+
+    tasks.push_back(
+      Task{ title, description, priority }
+    );
   };
-  return Storage::Tasks {};
+
+  tasksFile.close();
+  return tasks;
 }
