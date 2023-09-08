@@ -14,6 +14,7 @@ public:
   using Tasks = std::vector<Task>;
 
   App() {
+    
     tasks = tasksFile.loadTasks();
   }
 
